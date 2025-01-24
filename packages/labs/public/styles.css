@@ -1,0 +1,88 @@
+* { margin: 20; padding: 20}
+
+
+a {
+    color: var(--accent-color);
+    font-family: 'DM Serif Text';
+} 
+
+body {
+    background-color: var(--background-color);
+    background-size: cover;  
+    background-position: center; 
+    color: var(--text-color);
+    font-family: 'DM Serif Text';
+}
+
+.navbar {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    background-color: var(--primary-color);
+    padding: 10px 20px; 
+    color: var(--accent-color);
+}
+
+.navbar-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: var(--accent-color);
+    margin-left: 15px;
+    font-size: 1rem;
+    transition: color 0.3s ease; 
+}
+
+.navbar-links a:hover {
+    color: var(--hover-color);
+}
+
+.container{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 2.5fr;
+}
+
+.profile {
+    grid-row: 1 / 2; /* Occupies the first row */
+    grid-column: 1 / 2; /* Occupies the first column */
+}
+
+.profile img {
+    width: 300px; /* Make the image take the full width of the container */
+    height: 300px; /* Make the image take the full height of the container */
+    object-fit: cover; /* Ensures the image covers the container while maintaining aspect ratio */
+    display: block; /* Removes inline spacing caused by default image behavior */
+}
+
+.contact {
+    grid-row: 2 / 3; /* Occupies the second row */
+    grid-column: 1 / 2; /* Occupies the first column */
+}
+
+.contact dl {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Two columns: 1/3 for terms (dt) and 2/3 for descriptions (dd) */
+    gap: 10px 20px; /* Row and column spacing */
+    align-items: center; /* Vertically align text within the grid */
+}
+
+.contact dt {
+    font-weight: bold; /* Make the terms (dt) stand out */
+    text-align: left; /* Align terms to the right for better separation */
+    margin: 0; /* Remove default margins */
+}
+
+.contact dd {
+    margin: 0; /* Remove default margins */
+    text-align: left; /* Align descriptions (dd) to the left */
+}
+
+.about {
+    grid-row: 1 / 2; /* Occupies the first row */
+    grid-column: 2 / 3; /* Occupies the second column */
+}

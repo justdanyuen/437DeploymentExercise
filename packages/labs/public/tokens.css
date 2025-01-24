@@ -1,0 +1,17 @@
+/* colors */
+:root {
+    --primary-color: #374f2f; /* Dark green */
+    --secondary-color: #8A9E72; /* Muted green */
+    --accent-color: #FFEAC9; /* Light cream */
+    --hover-color: #ff9800; /* Highlight orange */
+    --background-color: #A1B88C; /* Soft green */
+    --text-color: #374f2f; /* Dark green for text */
+    --white: #ffffff; /* White for contrast */
+}
+
+/* Spacing Tokens */
+:root {
+    --spacing-small: 10px;
+    --spacing-medium: 20px;
+    --spacing-large: 40px;
+}
