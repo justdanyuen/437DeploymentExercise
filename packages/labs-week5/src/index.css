@@ -1,0 +1,19 @@
+@import "tailwindcss";
+.grocery-panel{
+    padding-top: 10px;
+}
+
+
+.price-table{
+    width: 100%;
+    border-collapse:collapse;
+    margin-top: 10px;
+    padding-left:10px;
+    margin-left:15px;
+}
+
+
+.price-table th{
+    text-align:left;
+}
+
