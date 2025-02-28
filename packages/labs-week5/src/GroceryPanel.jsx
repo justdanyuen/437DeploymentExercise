@@ -1,51 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./index.css";
 import { Spinner } from "./Spinner";
-import { groceryFetcher } from "./groceryFetcher";
+import { useGroceryFetch } from "./useGroceryFetch";
 
 export function GroceryPanel({ onAddTodo }) {
     const buttonClasses = `italic px-2 rounded-sm border border-gray-300
     hover:bg-gray-100 active:bg-gray-200 cursor-pointer`;
 
-    const [groceryData, setGroceryData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [dropdown, setDropdown] = useState("MDN");
 
-    useEffect(() => {
-        let isStale = false; // Prevents outdated fetch responses from overriding newer ones
-
-        async function fetchData(source) {
-            console.log(`Fetching data from ${source}...`);
-            setIsLoading(true);
-            setError(null);
-            setGroceryData([]); // Clear old data immediately
-
-            try {
-                const data = await groceryFetcher.fetch(source);
-                if (!isStale) {
-                    console.log("Data fetched:", data);
-                    setGroceryData(data);
-                }
-            } catch (err) {
-                console.error("Fetch error:", err);
-                if (!isStale) {
-                    setError("Sorry, something went wrong");
-                    setGroceryData([]); // Clear data if fetch fails
-                }
-            } finally {
-                if (!isStale) {
-                    setIsLoading(false);
-                }
-            }
-        }
-
-        fetchData(dropdown);
-
-        return () => {
-            isStale = true; // Mark request as stale when component re-renders
-        };
-    }, [dropdown]); // Re-run effect when `dropdown` changes
+    // Use custom hook for fetching data
+    const { groceryData, isLoading, error } = useGroceryFetch(dropdown);
 
     function handleAddTodoClicked(item) {
         const todoName = `Buy ${item.name} (${item.price.toFixed(2)})`;
@@ -54,7 +19,7 @@ export function GroceryPanel({ onAddTodo }) {
     }
 
     function handleDropdownChange(event) {
-        setDropdown(event.target.value); // Only update state, fetching is handled by `useEffect`
+        setDropdown(event.target.value);
     }
 
     return (
