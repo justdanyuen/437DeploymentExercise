@@ -10,5 +10,9 @@
   "license": "ISC",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongodb": "^6.14.2"
+  }
 }

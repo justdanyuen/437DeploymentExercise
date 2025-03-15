@@ -26,17 +26,21 @@ async function setUpServer() {
     try {
         const mongoClient = await mongodb_1.MongoClient.connect(connectionString);
         const db = mongoClient.db();
+        // Debug: Print collection names (remove later)
         const collectionInfos = await db.listCollections().toArray();
         console.log(collectionInfos.map((collectionInfo) => collectionInfo.name));
+        // Set up Express
         const app = (0, express_1.default)();
         app.use(express_1.default.json());
         app.use(express_1.default.static(staticDir));
         app.use("/uploads", express_1.default.static(uploadDir)); // Serve uploaded images
+        // Create an instance of ImageProvider
         const imageProvider = new ImageProvider_1.ImageProvider(mongoClient);
+        // Routes
         app.get("/hello", (req, res) => {
             res.send("Hello, World!");
         });
-        app.use("/api/*", auth_1.verifyAuthToken);
+        // app.use("/api/*", verifyAuthToken);
         (0, images_1.registerImageRoutes)(app, imageProvider);
         (0, auth_1.registerAuthRoutes)(app, mongoClient);
         app.get("*", (req, res) => {

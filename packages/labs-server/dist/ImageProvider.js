@@ -6,24 +6,50 @@ class ImageProvider {
     constructor(mongoClient) {
         this.mongoClient = mongoClient;
     }
-    async getAllImages() {
+    async updateImageName(imageId, newName) {
         const collectionName = process.env.IMAGES_COLLECTION_NAME;
-        const usersCollectionName = process.env.USERS_COLLECTION_NAME;
-        if (!collectionName || !usersCollectionName) {
-            throw new Error("Missing collection names from environment variables");
+        if (!collectionName) {
+            throw new Error("Missing image collection name from environment variables");
         }
         const db = this.mongoClient.db();
         const imagesCollection = db.collection(collectionName);
-        const usersCollection = db.collection(usersCollectionName);
-        const images = await imagesCollection.find().toArray();
-        const authorIds = images.map(image => image.author);
-        // Explicitly select both username and email fields
-        const authors = await usersCollection.find({ _id: { $in: authorIds } }, { projection: { username: 1, email: 1 } }).toArray();
-        const authorsMap = new Map(authors.map(author => [author._id, { username: author.username, email: author.email }]));
+        const result = await imagesCollection.updateOne({ _id: imageId }, { $set: { name: newName } });
+        return result.matchedCount;
+    }
+
+    async getAllImages(createdBy) { 
+        const collectionName = process.env.IMAGES_COLLECTION_NAME;
+        if (!collectionName) {
+            throw new Error("Missing image collection name from environment variables");
+        }
+    
+        const db = this.mongoClient.db();
+        const imagesCollection = db.collection(collectionName);
+    
+        const query = {};
+        if (createdBy) {
+            query.author = createdBy;
+        }
+    
+        const images = await imagesCollection.find(query).toArray();
+    
         return images.map(image => ({
             ...image,
-            author: authorsMap.get(image.author) || { username: "Unknown", email: "" } // Fallback in case author is missing
+            src: image.src.startsWith('http') ? image.src : `/api/image/${image._id}`,
         }));
+    }
+    
+    async createImage(image) {
+        if (image === undefined) {
+            throw new Error("Image is undefined");
+        }
+        const db = this.mongoClient.db();
+        const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
+        if (!imagesCollectionName) {
+            throw new Error("Missing collection name from environment variables");
+        }
+        const imagesCollection = db.collection(imagesCollectionName);
+        await imagesCollection.insertOne(image);
     }
 }
 exports.ImageProvider = ImageProvider;
